@@ -1,0 +1,29 @@
+// Apply essential plugins
+plugins {
+    id 'java' // Enables Java compilation
+    id 'org.springframework.boot' version '3.5.3' // Spring Boot plugin for app lifecycle management
+    id 'io.spring.dependency-management' version '1.1.7' // Ensures consistent dependency versions
+}
+
+dependencies {
+    implementation project(':calculator') // Depends on the calculator module within the same project
+    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot web starter for REST endpoints
+    implementation 'org.springframework.kafka:spring-kafka' // Kafka integration for message handling
+    implementation 'org.slf4j:slf4j-api' // Logging API abstraction
+    implementation 'ch.qos.logback:logback-classic' // Logback logging implementation
+
+    // Testing dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot test utilities
+    testImplementation 'org.assertj:assertj-core:3.25.1' // AssertJ for fluent assertions in tests
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3' // JUnit 5 testing framework
+    
+}
+
+// Use JUnit Platform (necessary for JUnit 5)
+test {
+    useJUnitPlatform()
+}
+
+springBoot {
+    mainClass = 'com.example.rest.RestApplication' // Entry point of the REST module
+}

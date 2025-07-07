@@ -1,0 +1,25 @@
+// Configuration applied to all projects and subprojects
+allprojects {
+    // Set the group ID for the project artifacts
+    group = 'com.example'
+    // Set the version of the project
+    version = '1.0-SNAPSHOT'
+
+    // Declare repositories to fetch dependencies from
+    repositories {
+        mavenCentral() // Use Maven Central repository
+    }
+}
+
+subprojects {
+    // Apply the Java plugin to all subprojects to add Java compilation support
+    apply plugin: 'java'
+    // Apply IntelliJ IDEA plugin for IDE support (e.g., project files generation)
+    apply plugin: 'idea'
+
+    // Configure Java version compatibility for all subprojects
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17  // Set source code compatibility to Java 17
+        targetCompatibility = JavaVersion.VERSION_17  // Set compiled bytecode compatibility to Java 17
+    }
+}

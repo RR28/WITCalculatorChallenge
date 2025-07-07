@@ -1,0 +1,43 @@
+
+services:
+  # Zookeeper service needed by Kafka to manage the cluster
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 # Default Zookeeper client port
+      ZOOKEEPER_TICK_TIME: 2000   # Basic time unit in milliseconds for Zookeeper
+
+   # Kafka broker service that handles messaging
+  kafka:
+    image: confluentinc/cp-kafka:7.2.1
+    depends_on:
+      - zookeeper       # Kafka depends on Zookeeper to be running first
+    ports:
+      - "9092:9092"     # Expose Kafka broker port to host
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181     # Connection string to Zookeeper service
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092    # Address Kafka advertises for clients
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1   # Replication factor for internal topics
+
+  # Calculator microservice, built from local Dockerfile in ./calculator
+  calculator:
+    build: ./calculator
+    depends_on:
+      - kafka     # Depends on Kafka to be ready
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092    # Kafka connection string for Spring Boot app
+    volumes:
+      - ./calculator-logs:/app/logs     # Mount logs directory for easier access/debugging
+      
+  # REST API microservice, built from local Dockerfile in ./rest
+  rest:
+    build: ./rest
+    ports:
+      - "8080:8080"   # Expose REST API on localhost:8080
+    depends_on:
+      - kafka         # Depends on Kafka to be ready
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092    # Kafka connection string for Spring Boot app
+    volumes:
+      - ./rest-logs:/app/logs     # Mount logs directory for easier access/debugging
