@@ -78,6 +78,7 @@ Response:
 - Zookeeper: `http://localhost:2181` (internal)
 
 ## Project Structure
+```
 .
 ├── calculator/            # Kafka listener & calculation logic
 │   └── Dockerfile
@@ -87,6 +88,8 @@ Response:
 ├── docker-compose.yml     # Service orchestration
 ├── README.md
 ├── .gitignore
+```
+
 
 ## Notes
 - Configuration is handled via `application.properties`
